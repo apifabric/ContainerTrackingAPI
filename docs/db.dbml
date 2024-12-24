@@ -1,0 +1,128 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Booking: Represents the bookings made for shipping containers from one location to another
+Container: Represents a shipping container
+Operator: Represents an operator who handles or manages the containers
+Location: Represents different geographical locations relevant to the container logistics
+Status: Represents the various statuses a container can have (e.g., in transit, delivered, etc.)
+ContainerType: Represents different types of containers such as refrigerated, dry storage etc.
+ContainerMaintenance: Represents maintenance or repairs executed on containers
+ContainerPosition: Represents GPS tracking information for containers at a given timestamp
+Inspection: Represents inspections carried out on containers
+Journey: Represents the journey or trip a container undergoes from origin to destination
+Route: Represents predefined routes for container transport
+TransitEvent: Represents events or updates during the transit of a container
+'''
+}
+
+Table Booking {
+    id INTEGER [primary key]
+    container_id INTEGER 
+    operator_id INTEGER 
+    booking_date DATE 
+    pickup_date DATE 
+    delivery_date DATE 
+    }
+
+Table Container {
+    id INTEGER [primary key]
+    container_code VARCHAR 
+    description VARCHAR 
+    status_id INTEGER 
+    location_id INTEGER 
+    type_id INTEGER 
+    }
+
+Table Operator {
+    id INTEGER [primary key]
+    name VARCHAR 
+    contact_info VARCHAR 
+    }
+
+Table Location {
+    id INTEGER [primary key]
+    name VARCHAR 
+    longitude FLOAT 
+    latitude FLOAT 
+    }
+
+Table Status {
+    id INTEGER [primary key]
+    name VARCHAR 
+    description VARCHAR 
+    }
+
+Table ContainerType {
+    id INTEGER [primary key]
+    name VARCHAR 
+    description VARCHAR 
+    }
+
+Table ContainerMaintenance {
+    id INTEGER [primary key]
+    container_id INTEGER 
+    date DATE 
+    description VARCHAR 
+    cost FLOAT 
+    }
+
+Table ContainerPosition {
+    id INTEGER [primary key]
+    container_id INTEGER 
+    timestamp DATETIME 
+    longitude FLOAT 
+    latitude FLOAT 
+    }
+
+Table Inspection {
+    id INTEGER [primary key]
+    container_id INTEGER 
+    date DATE 
+    result VARCHAR 
+    }
+
+Table Journey {
+    id INTEGER [primary key]
+    container_id INTEGER 
+    origin_id INTEGER 
+    destination_id INTEGER 
+    departure_date DATE 
+    arrival_date DATE 
+    }
+
+Table Route {
+    id INTEGER [primary key]
+    start_location_id INTEGER 
+    end_location_id INTEGER 
+    distance FLOAT 
+    estimated_time FLOAT 
+    }
+
+Table TransitEvent {
+    id INTEGER [primary key]
+    journey_id INTEGER 
+    event_date DATE 
+    description VARCHAR 
+    }
+
+
+
+// Relationships
+    Ref: Booking.(container_id) < Container.(id)
+    Ref: Booking.(operator_id) < Operator.(id)
+    Ref: Container.(location_id) < Location.(id)
+    Ref: Container.(status_id) < Status.(id)
+    Ref: Container.(type_id) < ContainerType.(id)
+    Ref: ContainerMaintenance.(container_id) < Container.(id)
+    Ref: ContainerPosition.(container_id) < Container.(id)
+    Ref: Inspection.(container_id) < Container.(id)
+    Ref: Journey.(container_id) < Container.(id)
+    Ref: Journey.(destination_id) < Location.(id)
+    Ref: Journey.(origin_id) < Location.(id)
+    Ref: Route.(end_location_id) < Location.(id)
+    Ref: Route.(start_location_id) < Location.(id)
+    Ref: TransitEvent.(journey_id) < Journey.(id)

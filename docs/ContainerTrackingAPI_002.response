@@ -1,0 +1,286 @@
+{
+    "models": [
+        {
+            "classname": "Container",
+            "code": "class Container(Base):\n    \"\"\"description: Represents a shipping container\"\"\"\n    __tablename__ = 'container'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    container_code = Column(String)\n    description = Column(String)\n    status_id = Column(Integer, ForeignKey('status.id'))\n    location_id = Column(Integer, ForeignKey('location.id'))\n    type_id = Column(Integer, ForeignKey('container_type.id'))",
+            "sqlite_create": "CREATE TABLE container (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    container_code TEXT,\n    description TEXT,\n    status_id INTEGER REFERENCES status(id),\n    location_id INTEGER REFERENCES location(id),\n    type_id INTEGER REFERENCES container_type(id)\n)",
+            "description": "Represents a shipping container",
+            "name": "container"
+        },
+        {
+            "classname": "Status",
+            "code": "class Status(Base):\n    \"\"\"description: Represents the various statuses a container can have (e.g., in transit, delivered, etc.)\"\"\"\n    __tablename__ = 'status'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    description = Column(String)",
+            "sqlite_create": "CREATE TABLE status (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT,\n    description TEXT\n)",
+            "description": "Represents the various statuses a container can have (e.g., in transit, delivered, etc.)",
+            "name": "status"
+        },
+        {
+            "classname": "Location",
+            "code": "class Location(Base):\n    \"\"\"description: Represents different geographical locations relevant to the container logistics\"\"\"\n    __tablename__ = 'location'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    longitude = Column(Float)\n    latitude = Column(Float)",
+            "sqlite_create": "CREATE TABLE location (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT,\n    longitude REAL,\n    latitude REAL\n)",
+            "description": "Represents different geographical locations relevant to the container logistics",
+            "name": "location"
+        },
+        {
+            "classname": "ContainerType",
+            "code": "class ContainerType(Base):\n    \"\"\"description: Represents different types of containers such as refrigerated, dry storage etc.\"\"\"\n    __tablename__ = 'container_type'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    description = Column(String)",
+            "sqlite_create": "CREATE TABLE container_type (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT,\n    description TEXT\n)",
+            "description": "Represents different types of containers such as refrigerated, dry storage etc.",
+            "name": "container_type"
+        },
+        {
+            "classname": "Journey",
+            "code": "class Journey(Base):\n    \"\"\"description: Represents the journey or trip a container undergoes from origin to destination\"\"\"\n    __tablename__ = 'journey'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    container_id = Column(Integer, ForeignKey('container.id'))\n    origin_id = Column(Integer, ForeignKey('location.id'))\n    destination_id = Column(Integer, ForeignKey('location.id'))\n    departure_date = Column(Date)\n    arrival_date = Column(Date)",
+            "sqlite_create": "CREATE TABLE journey (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    container_id INTEGER REFERENCES container(id),\n    origin_id INTEGER REFERENCES location(id),\n    destination_id INTEGER REFERENCES location(id),\n    departure_date DATE,\n    arrival_date DATE\n)",
+            "description": "Represents the journey or trip a container undergoes from origin to destination",
+            "name": "journey"
+        },
+        {
+            "classname": "TransitEvent",
+            "code": "class TransitEvent(Base):\n    \"\"\"description: Represents events or updates during the transit of a container\"\"\"\n    __tablename__ = 'transit_event'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    journey_id = Column(Integer, ForeignKey('journey.id'))\n    event_date = Column(Date)\n    description = Column(String)",
+            "sqlite_create": "CREATE TABLE transit_event (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    journey_id INTEGER REFERENCES journey(id),\n    event_date DATE,\n    description TEXT\n)",
+            "description": "Represents events or updates during the transit of a container",
+            "name": "transit_event"
+        },
+        {
+            "classname": "Operator",
+            "code": "class Operator(Base):\n    \"\"\"description: Represents an operator who handles or manages the containers\"\"\"\n    __tablename__ = 'operator'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String)\n    contact_info = Column(String)",
+            "sqlite_create": "CREATE TABLE operator (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT,\n    contact_info TEXT\n)",
+            "description": "Represents an operator who handles or manages the containers",
+            "name": "operator"
+        },
+        {
+            "classname": "ContainerMaintenance",
+            "code": "class ContainerMaintenance(Base):\n    \"\"\"description: Represents maintenance or repairs executed on containers\"\"\"\n    __tablename__ = 'container_maintenance'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    container_id = Column(Integer, ForeignKey('container.id'))\n    date = Column(Date)\n    description = Column(String)\n    cost = Column(Float)",
+            "sqlite_create": "CREATE TABLE container_maintenance (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    container_id INTEGER REFERENCES container(id),\n    date DATE,\n    description TEXT,\n    cost REAL\n)",
+            "description": "Represents maintenance or repairs executed on containers",
+            "name": "container_maintenance"
+        },
+        {
+            "classname": "Inspection",
+            "code": "class Inspection(Base):\n    \"\"\"description: Represents inspections carried out on containers\"\"\"\n    __tablename__ = 'inspection'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    container_id = Column(Integer, ForeignKey('container.id'))\n    date = Column(Date)\n    result = Column(String)",
+            "sqlite_create": "CREATE TABLE inspection (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    container_id INTEGER REFERENCES container(id),\n    date DATE,\n    result TEXT\n)",
+            "description": "Represents inspections carried out on containers",
+            "name": "inspection"
+        },
+        {
+            "classname": "ContainerPosition",
+            "code": "class ContainerPosition(Base):\n    \"\"\"description: Represents GPS tracking information for containers at a given timestamp\"\"\"\n    __tablename__ = 'container_position'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    container_id = Column(Integer, ForeignKey('container.id'))\n    timestamp = Column(DateTime)\n    longitude = Column(Float)\n    latitude = Column(Float)",
+            "sqlite_create": "CREATE TABLE container_position (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    container_id INTEGER REFERENCES container(id),\n    timestamp DATETIME,\n    longitude REAL,\n    latitude REAL\n)",
+            "description": "Represents GPS tracking information for containers at a given timestamp",
+            "name": "container_position"
+        },
+        {
+            "classname": "Route",
+            "code": "class Route(Base):\n    \"\"\"description: Represents predefined routes for container transport\"\"\"\n    __tablename__ = 'route'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    start_location_id = Column(Integer, ForeignKey('location.id'))\n    end_location_id = Column(Integer, ForeignKey('location.id'))\n    distance = Column(Float)\n    estimated_time = Column(Float)",
+            "sqlite_create": "CREATE TABLE route (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    start_location_id INTEGER REFERENCES location(id),\n    end_location_id INTEGER REFERENCES location(id),\n    distance REAL,\n    estimated_time REAL\n)",
+            "description": "Represents predefined routes for container transport",
+            "name": "route"
+        },
+        {
+            "classname": "Booking",
+            "code": "class Booking(Base):\n    \"\"\"description: Represents the bookings made for shipping containers from one location to another\"\"\"\n    __tablename__ = 'booking'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    container_id = Column(Integer, ForeignKey('container.id'))\n    operator_id = Column(Integer, ForeignKey('operator.id'))\n    booking_date = Column(Date)\n    pickup_date = Column(Date)\n    delivery_date = Column(Date)",
+            "sqlite_create": "CREATE TABLE booking (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    container_id INTEGER REFERENCES container(id),\n    operator_id INTEGER REFERENCES operator(id),\n    booking_date DATE,\n    pickup_date DATE,\n    delivery_date DATE\n)",
+            "description": "Represents the bookings made for shipping containers from one location to another",
+            "name": "booking"
+        }
+    ],
+    "rules": [],
+    "test_data": "Python test data instances for Container:\ncontainer1 = Container(...)\ncontainer2 = Container(...)\ncontainer3 = Container(...)\ncontainer4 = Container(...)\n\nPython test data instances for Status:\nstatus1 = Status(...)\nstatus2 = Status(...)\nstatus3 = Status(...)\nstatus4 = Status(...)\n\nPython test data instances for Location:\nlocation1 = Location(...)\nlocation2 = Location(...)\nlocation3 = Location(...)\nlocation4 = Location(...)\n\nPython test data instances for ContainerType:\ncontainer_type1 = ContainerType(...)\ncontainer_type2 = ContainerType(...)\ncontainer_type3 = ContainerType(...)\ncontainer_type4 = ContainerType(...)\n\nPython test data instances for Journey:\njourney1 = Journey(...)\njourney2 = Journey(...)\njourney3 = Journey(...)\njourney4 = Journey(...)\n\nPython test data instances for TransitEvent:\ntransit_event1 = TransitEvent(...)\ntransit_event2 = TransitEvent(...)\ntransit_event3 = TransitEvent(...)\ntransit_event4 = TransitEvent(...)\n\nPython test data instances for Operator:\noperator1 = Operator(...)\noperator2 = Operator(...)\noperator3 = Operator(...)\noperator4 = Operator(...)\n\nPython test data instances for ContainerMaintenance:\ncontainer_maintenance1 = ContainerMaintenance(...)\ncontainer_maintenance2 = ContainerMaintenance(...)\ncontainer_maintenance3 = ContainerMaintenance(...)\ncontainer_maintenance4 = ContainerMaintenance(...)\n\nPython test data instances for Inspection:\ninspection1 = Inspection(...)\ninspection2 = Inspection(...)\ninspection3 = Inspection(...)\ninspection4 = Inspection(...)\n\nPython test data instances for ContainerPosition:\ncontainer_position1 = ContainerPosition(...)\ncontainer_position2 = ContainerPosition(...)\ncontainer_position3 = ContainerPosition(...)\ncontainer_position4 = ContainerPosition(...)\n\nPython test data instances for Route:\nroute1 = Route(...)\nroute2 = Route(...)\nroute3 = Route(...)\nroute4 = Route(...)\n\nPython test data instances for Booking:\nbooking1 = Booking(...)\nbooking2 = Booking(...)\nbooking3 = Booking(...)\nbooking4 = Booking(...)",
+    "test_data_rows": [
+        {
+            "test_data_row_variable": "container1",
+            "code": "container1 = Container(container_code=\"ABC123\", description=\"Standard container\", status_id=1, location_id=1, type_id=1)"
+        },
+        {
+            "test_data_row_variable": "container2",
+            "code": "container2 = Container(container_code=\"XYZ456\", description=\"Refrigerated container\", status_id=2, location_id=2, type_id=2)"
+        },
+        {
+            "test_data_row_variable": "container3",
+            "code": "container3 = Container(container_code=\"LMN789\", description=\"Hazardous goods container\", status_id=3, location_id=3, type_id=3)"
+        },
+        {
+            "test_data_row_variable": "container4",
+            "code": "container4 = Container(container_code=\"QWE123\", description=\"Open-top container\", status_id=4, location_id=4, type_id=4)"
+        },
+        {
+            "test_data_row_variable": "status1",
+            "code": "status1 = Status(name=\"In Transit\", description=\"Container is currently being transported\")"
+        },
+        {
+            "test_data_row_variable": "status2",
+            "code": "status2 = Status(name=\"Delivered\", description=\"Container has been delivered to destination\")"
+        },
+        {
+            "test_data_row_variable": "status3",
+            "code": "status3 = Status(name=\"Awaiting Pickup\", description=\"Container is waiting to be picked up\")"
+        },
+        {
+            "test_data_row_variable": "status4",
+            "code": "status4 = Status(name=\"Under Maintenance\", description=\"Container is currently under maintenance\")"
+        },
+        {
+            "test_data_row_variable": "location1",
+            "code": "location1 = Location(name=\"Port of Shanghai\", longitude=31.2304, latitude=121.4737)"
+        },
+        {
+            "test_data_row_variable": "location2",
+            "code": "location2 = Location(name=\"Port of Los Angeles\", longitude=33.7405, latitude=-118.2662)"
+        },
+        {
+            "test_data_row_variable": "location3",
+            "code": "location3 = Location(name=\"Port of Rotterdam\", longitude=51.9494, latitude=4.1421)"
+        },
+        {
+            "test_data_row_variable": "location4",
+            "code": "location4 = Location(name=\"Port of Singapore\", longitude=1.2644, latitude=103.8228)"
+        },
+        {
+            "test_data_row_variable": "container_type1",
+            "code": "container_type1 = ContainerType(name=\"Standard\", description=\"Standard dry storage container\")"
+        },
+        {
+            "test_data_row_variable": "container_type2",
+            "code": "container_type2 = ContainerType(name=\"Refrigerated\", description=\"Refrigerated container for perishables\")"
+        },
+        {
+            "test_data_row_variable": "container_type3",
+            "code": "container_type3 = ContainerType(name=\"Hazardous\", description=\"Container for hazardous goods\")"
+        },
+        {
+            "test_data_row_variable": "container_type4",
+            "code": "container_type4 = ContainerType(name=\"Open-Top\", description=\"Open-top container for bulky cargo\")"
+        },
+        {
+            "test_data_row_variable": "journey1",
+            "code": "journey1 = Journey(container_id=1, origin_id=1, destination_id=2, departure_date=date(2023, 1, 15), arrival_date=date(2023, 2, 25))"
+        },
+        {
+            "test_data_row_variable": "journey2",
+            "code": "journey2 = Journey(container_id=2, origin_id=2, destination_id=3, departure_date=date(2023, 3, 5), arrival_date=date(2023, 4, 20))"
+        },
+        {
+            "test_data_row_variable": "journey3",
+            "code": "journey3 = Journey(container_id=3, origin_id=3, destination_id=4, departure_date=date(2023, 5, 10), arrival_date=date(2023, 6, 15))"
+        },
+        {
+            "test_data_row_variable": "journey4",
+            "code": "journey4 = Journey(container_id=4, origin_id=4, destination_id=1, departure_date=date(2023, 7, 20), arrival_date=date(2023, 9, 5))"
+        },
+        {
+            "test_data_row_variable": "transit_event1",
+            "code": "transit_event1 = TransitEvent(journey_id=1, event_date=date(2023, 1, 20), description=\"Loaded at Shanghai port\")"
+        },
+        {
+            "test_data_row_variable": "transit_event2",
+            "code": "transit_event2 = TransitEvent(journey_id=2, event_date=date(2023, 3, 10), description=\"Departed from Los Angeles port\")"
+        },
+        {
+            "test_data_row_variable": "transit_event3",
+            "code": "transit_event3 = TransitEvent(journey_id=3, event_date=date(2023, 5, 20), description=\"Delayed due to weather conditions\")"
+        },
+        {
+            "test_data_row_variable": "transit_event4",
+            "code": "transit_event4 = TransitEvent(journey_id=4, event_date=date(2023, 7, 25), description=\"Inspected at Singapore port\")"
+        },
+        {
+            "test_data_row_variable": "operator1",
+            "code": "operator1 = Operator(name=\"Global Shipping Ltd.\", contact_info=\"global@shipping.com\")"
+        },
+        {
+            "test_data_row_variable": "operator2",
+            "code": "operator2 = Operator(name=\"TransOcean Carriers\", contact_info=\"info@transocean.com\")"
+        },
+        {
+            "test_data_row_variable": "operator3",
+            "code": "operator3 = Operator(name=\"CargoExpress\", contact_info=\"contact@cargoexpress.net\")"
+        },
+        {
+            "test_data_row_variable": "operator4",
+            "code": "operator4 = Operator(name=\"FastTrack Logistics\", contact_info=\"support@fasttracklogistics.com\")"
+        },
+        {
+            "test_data_row_variable": "container_maintenance1",
+            "code": "container_maintenance1 = ContainerMaintenance(container_id=1, date=date(2023, 8, 1), description=\"Routine inspection and cleaning\", cost=200.0)"
+        },
+        {
+            "test_data_row_variable": "container_maintenance2",
+            "code": "container_maintenance2 = ContainerMaintenance(container_id=2, date=date(2023, 9, 12), description=\"Refrigeration system repair\", cost=750.0)"
+        },
+        {
+            "test_data_row_variable": "container_maintenance3",
+            "code": "container_maintenance3 = ContainerMaintenance(container_id=3, date=date(2023, 10, 5), description=\"Structura integrity check\", cost=500.0)"
+        },
+        {
+            "test_data_row_variable": "container_maintenance4",
+            "code": "container_maintenance4 = ContainerMaintenance(container_id=4, date=date(2023, 11, 15), description=\"Roof tarpaulin replacement\", cost=320.0)"
+        },
+        {
+            "test_data_row_variable": "inspection1",
+            "code": "inspection1 = Inspection(container_id=1, date=date(2023, 6, 30), result=\"Passed\")"
+        },
+        {
+            "test_data_row_variable": "inspection2",
+            "code": "inspection2 = Inspection(container_id=2, date=date(2023, 7, 15), result=\"Passed with minor issues\")"
+        },
+        {
+            "test_data_row_variable": "inspection3",
+            "code": "inspection3 = Inspection(container_id=3, date=date(2023, 8, 20), result=\"Failed due to structural damage\")"
+        },
+        {
+            "test_data_row_variable": "inspection4",
+            "code": "inspection4 = Inspection(container_id=4, date=date(2023, 9, 25), result=\"Passed\")"
+        },
+        {
+            "test_data_row_variable": "container_position1",
+            "code": "container_position1 = ContainerPosition(container_id=1, timestamp=datetime(2023, 2, 1, 12, 30), longitude=131.0, latitude=13.5)"
+        },
+        {
+            "test_data_row_variable": "container_position2",
+            "code": "container_position2 = ContainerPosition(container_id=2, timestamp=datetime(2023, 4, 8, 14, 45), longitude=140.0, latitude=36.5)"
+        },
+        {
+            "test_data_row_variable": "container_position3",
+            "code": "container_position3 = ContainerPosition(container_id=3, timestamp=datetime(2023, 6, 17, 10, 15), longitude=120.0, latitude=28.0)"
+        },
+        {
+            "test_data_row_variable": "container_position4",
+            "code": "container_position4 = ContainerPosition(container_id=4, timestamp=datetime(2023, 8, 20, 16, 22), longitude=110.0, latitude=55.6)"
+        },
+        {
+            "test_data_row_variable": "route1",
+            "code": "route1 = Route(start_location_id=1, end_location_id=2, distance=13250.0, estimated_time=20.5)"
+        },
+        {
+            "test_data_row_variable": "route2",
+            "code": "route2 = Route(start_location_id=2, end_location_id=3, distance=8450.0, estimated_time=15.0)"
+        },
+        {
+            "test_data_row_variable": "route3",
+            "code": "route3 = Route(start_location_id=3, end_location_id=4, distance=9400.0, estimated_time=17.7)"
+        },
+        {
+            "test_data_row_variable": "route4",
+            "code": "route4 = Route(start_location_id=4, end_location_id=1, distance=7700.0, estimated_time=14.2)"
+        },
+        {
+            "test_data_row_variable": "booking1",
+            "code": "booking1 = Booking(container_id=1, operator_id=1, booking_date=date(2023, 1, 10), pickup_date=date(2023, 1, 20), delivery_date=date(2023, 2, 25))"
+        },
+        {
+            "test_data_row_variable": "booking2",
+            "code": "booking2 = Booking(container_id=2, operator_id=2, booking_date=date(2023, 3, 2), pickup_date=date(2023, 3, 8), delivery_date=date(2023, 4, 25))"
+        },
+        {
+            "test_data_row_variable": "booking3",
+            "code": "booking3 = Booking(container_id=3, operator_id=3, booking_date=date(2023, 5, 1), pickup_date=date(2023, 5, 15), delivery_date=date(2023, 6, 20))"
+        },
+        {
+            "test_data_row_variable": "booking4",
+            "code": "booking4 = Booking(container_id=4, operator_id=4, booking_date=date(2023, 7, 10), pickup_date=date(2023, 7, 20), delivery_date=date(2023, 9, 15))"
+        }
+    ],
+    "test_data_sqlite": "INSERT INTO container (container_code, description, status_id, location_id, type_id) VALUES\n('ABC123', 'Standard container', 1, 1, 1),\n('XYZ456', 'Refrigerated container', 2, 2, 2),\n('LMN789', 'Hazardous goods container', 3, 3, 3),\n('QWE123', 'Open-top container', 4, 4, 4);\n\nINSERT INTO status (name, description) VALUES\n('In Transit', 'Container is currently being transported'),\n('Delivered', 'Container has been delivered to destination'),\n('Awaiting Pickup', 'Container is waiting to be picked up'),\n('Under Maintenance', 'Container is currently under maintenance');\n\nINSERT INTO location (name, longitude, latitude) VALUES\n('Port of Shanghai', 31.2304, 121.4737),\n('Port of Los Angeles', 33.7405, -118.2662),\n('Port of Rotterdam', 51.9494, 4.1421),\n('Port of Singapore', 1.2644, 103.8228);\n\nINSERT INTO container_type (name, description) VALUES\n('Standard', 'Standard dry storage container'),\n('Refrigerated', 'Refrigerated container for perishables'),\n('Hazardous', 'Container for hazardous goods'),\n('Open-Top', 'Open-top container for bulky cargo');\n\nINSERT INTO journey (container_id, origin_id, destination_id, departure_date, arrival_date) VALUES\n(1, 1, 2, '2023-01-15', '2023-02-25'),\n(2, 2, 3, '2023-03-05', '2023-04-20'),\n(3, 3, 4, '2023-05-10', '2023-06-15'),\n(4, 4, 1, '2023-07-20', '2023-09-05');\n\nINSERT INTO transit_event (journey_id, event_date, description) VALUES\n(1, '2023-01-20', 'Loaded at Shanghai port'),\n(2, '2023-03-10', 'Departed from Los Angeles port'),\n(3, '2023-05-20', 'Delayed due to weather conditions'),\n(4, '2023-07-25', 'Inspected at Singapore port');\n\nINSERT INTO operator (name, contact_info) VALUES\n('Global Shipping Ltd.', 'global@shipping.com'),\n('TransOcean Carriers', 'info@transocean.com'),\n('CargoExpress', 'contact@cargoexpress.net'),\n('FastTrack Logistics', 'support@fasttracklogistics.com');\n\nINSERT INTO container_maintenance (container_id, date, description, cost) VALUES\n(1, '2023-08-01', 'Routine inspection and cleaning', 200.0),\n(2, '2023-09-12', 'Refrigeration system repair', 750.0),\n(3, '2023-10-05', 'Structural integrity check', 500.0),\n(4, '2023-11-15', 'Roof tarpaulin replacement', 320.0);\n\nINSERT INTO inspection (container_id, date, result) VALUES\n(1, '2023-06-30', 'Passed'),\n(2, '2023-07-15', 'Passed with minor issues'),\n(3, '2023-08-20', 'Failed due to structural damage'),\n(4, '2023-09-25', 'Passed');\n\nINSERT INTO container_position (container_id, timestamp, longitude, latitude) VALUES\n(1, '2023-02-01 12:30', 131.0, 13.5),\n(2, '2023-04-08 14:45', 140.0, 36.5),\n(3, '2023-06-17 10:15', 120.0, 28.0),\n(4, '2023-08-20 16:22', 110.0, 55.6);\n\nINSERT INTO route (start_location_id, end_location_id, distance, estimated_time) VALUES\n(1, 2, 13250.0, 20.5),\n(2, 3, 8450.0, 15.0),\n(3, 4, 9400.0, 17.7),\n(4, 1, 7700.0, 14.2);\n\nINSERT INTO booking (container_id, operator_id, booking_date, pickup_date, delivery_date) VALUES\n(1, 1, '2023-01-10', '2023-01-20', '2023-02-25'),\n(2, 2, '2023-03-02', '2023-03-08', '2023-04-25'),\n(3, 3, '2023-05-01', '2023-05-15', '2023-06-20'),\n(4, 4, '2023-07-10', '2023-07-20', '2023-09-15');",
+    "name": "ContainerTrackingAPI"
+}

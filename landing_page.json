@@ -1,0 +1,122 @@
+{
+    "name": "API de Rastreamento de Cont\u00eainer",
+    "logo": {
+        "Type": "Logo",
+        "name": "Company Logo",
+        "description": "The company logo for API de Rastreamento de Cont\u00eainer featuring a stylized container and tracking icon."
+    },
+    "sections": [
+        {
+            "title": "Track Your Containers in Real-Time",
+            "subtitle": "Seamlessly monitor your shipments from any part of the globe",
+            "name": "HeroSection",
+            "label": "Home",
+            "content": "Welcome to the future of container tracking with our cutting-edge real-time API. Ensure your cargo is always safe and exactly where it should be, all with a few clicks.",
+            "order": 1,
+            "Type": "Hero",
+            "images": [
+                {
+                    "Type": "Hero",
+                    "name": "Hero Image",
+                    "description": "A shipping yard with multiple containers and a digital interface overlay."
+                }
+            ]
+        },
+        {
+            "title": "About Us",
+            "subtitle": "Leading the way in container tracking technology",
+            "name": "AboutSection",
+            "label": "About",
+            "content": "**API de Rastreamento de Cont\u00eainer** is dedicated to delivering the most reliable and accurate container tracking solutions on the market. Our mission is to provide businesses with the tools needed to streamline supply chain logistics and improve operational efficiency. With a focus on innovation, our team of experts works tirelessly to push the boundaries of what's possible in real-time tracking technology.",
+            "order": 2,
+            "Type": "About",
+            "images": [
+                {
+                    "Type": "Background",
+                    "name": "About Background",
+                    "description": "Team working on digital interfaces and tracking software."
+                }
+            ]
+        },
+        {
+            "title": "Our Services",
+            "subtitle": "",
+            "name": "ServicesSection",
+            "label": "Services",
+            "content": "- **Real-Time Tracking**: Monitor your containers with live updates and precise location data.  \n- **API Integration**: Seamlessly integrate our API into your existing systems for enhanced functionality.  \n- **Custom Alerts**: Set notifications for specific events or changes in status.  \n- **Detailed Analytics**: Access comprehensive reports and insights to better understand your logistics operations.",
+            "order": 3,
+            "Type": "Services",
+            "images": [
+                {
+                    "Type": "Infographic",
+                    "name": "Services Infographic",
+                    "description": "An infographic showing the services offered by the API including tracking, integration, and analytics."
+                }
+            ]
+        },
+        {
+            "title": "Client Testimonials",
+            "subtitle": "What our customers have to say",
+            "name": "TestimonialsSection",
+            "label": "Testimonials",
+            "content": "\"The API de Rastreamento de Cont\u00eainer has transformed our logistics capabilities. The real-time tracking and analytics provided have been instrumental in optimizing our supply chain process.\"  \n\n\u2013 **Samantha Oliveira, Logistics Manager at Global Shipping Inc.**",
+            "order": 4,
+            "Type": "Testimonials",
+            "images": [
+                {
+                    "Type": "Testimonial",
+                    "name": "Testimonial Image",
+                    "description": "Photo of a satisfied customer providing a testimonial."
+                }
+            ]
+        },
+        {
+            "title": "Contact Us",
+            "subtitle": "Get in touch for a demo or more information",
+            "name": "ContactSection",
+            "label": "Contact",
+            "content": "**Email**: contact@trackerapi.com  \n**Phone**: +55 (11) 1234-5678  \n**Address**: Rua da Logistica, 123, S\u00e3o Paulo, SP, Brazil  \n\nWe're eager to help you take charge of your shipment tracking. Reach out today!",
+            "order": 5,
+            "Type": "Contact",
+            "images": [
+                {
+                    "Type": "Map",
+                    "name": "Office Location Map",
+                    "description": "Map showing the location of the company's main office in S\u00e3o Paulo."
+                }
+            ]
+        },
+        {
+            "title": "Latest News",
+            "subtitle": "",
+            "name": "NewsSection",
+            "label": "News",
+            "content": "Stay updated with the latest advancements and updates on our API technology.  \n\n**April 2024 Update**: We\u2019ve enhanced our API functionalities, integrating even more efficient tracking algorithms for greater accuracy.  \n\n**March 2024**: Partnered with Global Freight Network to bring advanced tracking capabilities to a wider audience.",
+            "order": 6,
+            "Type": "News",
+            "images": [
+                {
+                    "Type": "Icon",
+                    "name": "News Icon",
+                    "description": "An icon representing news and updates."
+                }
+            ]
+        },
+        {
+            "title": "FAQ",
+            "subtitle": "Common questions answered",
+            "name": "FAQSection",
+            "label": "FAQ",
+            "content": "**Q: How accurate is the real-time tracking?**  \nA: Our tracking data is accurate up to a 10-meter radius, providing you with precise location information.  \n\n**Q: Can I customize alerts?**  \nA: Yes, our system allows you to set up custom notifications for various shipment events or milestones.",
+            "order": 7,
+            "Type": "FAQ",
+            "images": [
+                {
+                    "Type": "Icon",
+                    "name": "FAQ Icon",
+                    "description": "An icon representing frequently asked questions."
+                }
+            ]
+        }
+    ]
+}

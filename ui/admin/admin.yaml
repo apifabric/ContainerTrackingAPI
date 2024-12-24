@@ -1,0 +1,375 @@
+about:
+  date: December 24, 2024 03:34:53
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 14
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Booking:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: container_id
+    - name: operator_id
+    - name: booking_date
+      type: DATE
+    - name: pickup_date
+      type: DATE
+    - name: delivery_date
+      type: DATE
+    description: Represents the bookings made for shipping containers from one location
+      to another
+    info_list: Represents the bookings made for shipping containers from one location
+      to another
+    tab_groups:
+    - direction: toone
+      fks:
+      - container_id
+      name: container
+      resource: Container
+    - direction: toone
+      fks:
+      - operator_id
+      name: operator
+      resource: Operator
+    type: Booking
+    user_key: id
+  Container:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: location_id
+    - name: status_id
+    - name: type_id
+    - name: container_code
+    - name: id
+    description: Represents a shipping container
+    info_list: Represents a shipping container
+    tab_groups:
+    - direction: tomany
+      fks:
+      - container_id
+      name: BookingList
+      resource: Booking
+    - direction: tomany
+      fks:
+      - container_id
+      name: ContainerMaintenanceList
+      resource: ContainerMaintenance
+    - direction: tomany
+      fks:
+      - container_id
+      name: ContainerPositionList
+      resource: ContainerPosition
+    - direction: tomany
+      fks:
+      - container_id
+      name: InspectionList
+      resource: Inspection
+    - direction: tomany
+      fks:
+      - container_id
+      name: JourneyList
+      resource: Journey
+    - direction: toone
+      fks:
+      - location_id
+      name: location
+      resource: Location
+    - direction: toone
+      fks:
+      - status_id
+      name: status
+      resource: Status
+    - direction: toone
+      fks:
+      - type_id
+      name: type
+      resource: ContainerType
+    type: Container
+    user_key: description
+  ContainerMaintenance:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: container_id
+    - name: date
+      type: DATE
+    - name: cost
+    - name: id
+    description: Represents maintenance or repairs executed on containers
+    info_list: Represents maintenance or repairs executed on containers
+    tab_groups:
+    - direction: toone
+      fks:
+      - container_id
+      name: container
+      resource: Container
+    type: ContainerMaintenance
+    user_key: description
+  ContainerPosition:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: container_id
+    - name: timestamp
+      type: DATETIME
+    - name: longitude
+    - name: latitude
+    description: Represents GPS tracking information for containers at a given timestamp
+    info_list: Represents GPS tracking information for containers at a given timestamp
+    tab_groups:
+    - direction: toone
+      fks:
+      - container_id
+      name: container
+      resource: Container
+    type: ContainerPosition
+    user_key: id
+  ContainerType:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: description
+    - name: id
+    description: Represents different types of containers such as refrigerated, dry
+      storage etc.
+    info_list: Represents different types of containers such as refrigerated, dry
+      storage etc.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - type_id
+      name: ContainerList
+      resource: Container
+    type: ContainerType
+    user_key: name
+  Inspection:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: container_id
+    - name: date
+      type: DATE
+    - name: result
+    description: Represents inspections carried out on containers
+    info_list: Represents inspections carried out on containers
+    tab_groups:
+    - direction: toone
+      fks:
+      - container_id
+      name: container
+      resource: Container
+    type: Inspection
+    user_key: id
+  Journey:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: container_id
+    - name: destination_id
+    - name: origin_id
+    - name: departure_date
+      type: DATE
+    - name: arrival_date
+      type: DATE
+    description: Represents the journey or trip a container undergoes from origin
+      to destination
+    info_list: Represents the journey or trip a container undergoes from origin to
+      destination
+    tab_groups:
+    - direction: tomany
+      fks:
+      - journey_id
+      name: TransitEventList
+      resource: TransitEvent
+    - direction: toone
+      fks:
+      - container_id
+      name: container
+      resource: Container
+    - direction: toone
+      fks:
+      - destination_id
+      name: destination
+      resource: Location
+    - direction: toone
+      fks:
+      - origin_id
+      name: origin
+      resource: Location
+    type: Journey
+    user_key: id
+  Location:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: longitude
+    - name: latitude
+    - name: id
+    description: Represents different geographical locations relevant to the container
+      logistics
+    info_list: Represents different geographical locations relevant to the container
+      logistics
+    tab_groups:
+    - direction: tomany
+      fks:
+      - location_id
+      name: ContainerList
+      resource: Container
+    - direction: tomany
+      fks:
+      - destination_id
+      name: JourneyList
+      resource: Journey
+    - direction: tomany
+      fks:
+      - origin_id
+      name: originJourneyList
+      resource: Journey
+    - direction: tomany
+      fks:
+      - end_location_id
+      name: RouteList
+      resource: Route
+    - direction: tomany
+      fks:
+      - start_location_id
+      name: startRouteList
+      resource: Route
+    type: Location
+    user_key: name
+  Operator:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: contact_info
+    - name: id
+    description: Represents an operator who handles or manages the containers
+    info_list: Represents an operator who handles or manages the containers
+    tab_groups:
+    - direction: tomany
+      fks:
+      - operator_id
+      name: BookingList
+      resource: Booking
+    type: Operator
+    user_key: name
+  Route:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: end_location_id
+    - name: start_location_id
+    - name: distance
+    - name: estimated_time
+    description: Represents predefined routes for container transport
+    info_list: Represents predefined routes for container transport
+    tab_groups:
+    - direction: toone
+      fks:
+      - end_location_id
+      name: end_location
+      resource: Location
+    - direction: toone
+      fks:
+      - start_location_id
+      name: start_location
+      resource: Location
+    type: Route
+    user_key: id
+  Status:
+    attributes:
+    - label: ' name*'
+      name: name
+      search: true
+      sort: true
+    - name: description
+    - name: id
+    description: Represents the various statuses a container can have (e.g., in transit,
+      delivered, etc.)
+    info_list: Represents the various statuses a container can have (e.g., in transit,
+      delivered, etc.)
+    tab_groups:
+    - direction: tomany
+      fks:
+      - status_id
+      name: ContainerList
+      resource: Container
+    type: Status
+    user_key: name
+  TransitEvent:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: journey_id
+    - name: event_date
+      type: DATE
+    - name: id
+    description: Represents events or updates during the transit of a container
+    info_list: Represents events or updates during the transit of a container
+    tab_groups:
+    - direction: toone
+      fks:
+      - journey_id
+      name: journey
+      resource: Journey
+    type: TransitEvent
+    user_key: description
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'
